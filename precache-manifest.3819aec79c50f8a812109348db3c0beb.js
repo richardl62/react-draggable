@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "f357f897d61c17d2399fd440e467f60b",
+    "revision": "15258e4c5d22f1c42a3a61e2a1fb4bf3",
     "url": "/react-draggable/index.html"
   },
   {
-    "revision": "2e785a5b9fb53526021a",
+    "revision": "b5eeb3daa864922493bc",
     "url": "/react-draggable/static/css/main.f62810b7.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/react-draggable/static/js/2.8930bc88.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "2e785a5b9fb53526021a",
-    "url": "/react-draggable/static/js/main.dd38ad44.chunk.js"
+    "revision": "b5eeb3daa864922493bc",
+    "url": "/react-draggable/static/js/main.bf0c1f66.chunk.js"
   },
   {
     "revision": "4b1b15ad4ac3ba241d91",
