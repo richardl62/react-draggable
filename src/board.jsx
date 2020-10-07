@@ -1,5 +1,14 @@
 import React from 'react'
 import { Knight } from './pieces';
+
+function requiredDefined(...args) {
+    args.forEach(arg => {
+        if(arg === undefined) {
+            console.log('required arguments in undefined in', args)
+            throw new Error('required arguments in undefined in', args);
+        }
+    });
+}
 function Square({black, children} ) {
     const className = 'square' + (black ? ' blackSquare' : '');
     return (
@@ -9,23 +18,29 @@ function Square({black, children} ) {
     )
   }
 
-function renderSquare(row, col, knightPosition)
-{
-    const black = (row+col) % 2 === 0;
-    const isKnight = (row === knightPosition[0])  && (col === knightPosition[1]); 
+function renderSquare(black, isKnight) {
     return (
         <Square black={black}>
             {isKnight? <Knight /> : null}
         </Square>
     );
+
 }
 function Board(props) {
-    const {nRows, nCols, knightPosition} = props;
+    const {config, knightPosition} = props;
+    const {nRows, nCols, topLeftBlack} = config;
+    requiredDefined(nRows, nCols, topLeftBlack, knightPosition);
+
+    const isBlack = (row, col) => {
+        const asTopleft = (row+col) % 2 === 0;
+        return topLeftBlack ? asTopleft : !asTopleft;
+    };
 
     let squares = [];
     for(let row = 0; row < nRows; ++row) {
         for(let col = 0; col < nCols; ++col) {
-            squares.push(renderSquare(row, col, knightPosition))
+            const isKnight = (row === knightPosition[0])  && (col === knightPosition[1]); 
+            squares.push(renderSquare(isBlack(row,col), isKnight));
         }
     }
     
@@ -35,7 +50,6 @@ function Board(props) {
         "grid-template-rows": `repeat(${nRows},50px)`,
         width: 'fit-content'
     };
-    console.log(style);
 
     return (
         <div className="board" style={style}> 
