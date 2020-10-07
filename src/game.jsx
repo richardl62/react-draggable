@@ -18,4 +18,14 @@ function knightMove(toRow, toCol) {
 }
 
 
-export { setObserver, knightMove }
+function processSquareClick(row, col) {
+    const rowDelta = Math.abs(row - knightPosition[0]);
+    const colDelta = Math.abs(col - knightPosition[1]);
+
+    if((rowDelta === 1 && colDelta === 2) || (rowDelta === 2 && colDelta === 1) )
+    {
+        knightMove(row,col);
+    }
+}
+
+export { setObserver, processSquareClick }

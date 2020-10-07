@@ -4,12 +4,11 @@
     padding: 0;
 }
 
-.square {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 45px;
+.piece {
+    text-align: center;
+    font-size: 40px;
 }
+
 
 .blackSquare {
     background-color: rgb(255, 80, 80);
