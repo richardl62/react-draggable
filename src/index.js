@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { Board } from './board';
 import * as serviceWorker from './serviceWorker';
-import { observe } from './game'
+import { setObserver, knightMove } from './game'
 
 const root = document.getElementById('root');
 
@@ -13,7 +13,7 @@ let boardConfig = {
   topLeftBlack: false,
 }
 
-observe(boardConfig, knightPosition => {
+setObserver(knightPosition => {
   ReactDOM.render(
     <React.StrictMode>
       <Board config={boardConfig} knightPosition={knightPosition}/>
@@ -21,6 +21,25 @@ observe(boardConfig, knightPosition => {
     root
   );
 });
+
+
+function moveKnightOneSquare() {
+  const { nRows, nCols } = boardConfig;
+
+  if(this.count === undefined) {
+    this.count = 0;
+  }
+  
+  knightMove(
+    Math.floor(this.count / nCols) % nRows,
+    this.count % nCols,
+  )
+  ++this.count;
+}
+
+
+setInterval(moveKnightOneSquare, 500);
+
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

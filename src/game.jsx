@@ -1,20 +1,21 @@
 import './game.css';
 
-let count = 0;
-function observe(config, receive) {
-    const {nRows, nCols} = config;
-    const getPos = () => {
-        const pos = [
-            Math.floor(count/nCols) % nRows,
-            count % nCols,
-        ];
-        console.log(count, pos);
-        ++count; 
-        return pos;
+let observer = null;
+let  knightPosition = [0,0];
+
+function setObserver(o) {
+    if(observer) {
+        throw new Error("Multiple observers not supported");
     }
-
-    setInterval(() => receive(getPos()), 500);
-
+    
+    observer = o;
+    observer(knightPosition)
 }
 
-export { observe }
+function knightMove(toRow, toCol) {
+    knightPosition = [toRow, toCol];
+    observer(knightPosition)
+}
+
+
+export { setObserver, knightMove }
