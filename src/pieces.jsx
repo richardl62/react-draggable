@@ -25,4 +25,16 @@ function Knight() {
   </div>;  // Umicode white knight
 }
 
-export { Knight }
+function Piece({type}) {
+    
+  if(type === itemTypes.KNIGHT) {
+      return <Knight></Knight>
+    }
+
+  if (type) {
+    throw new Error("Pieces other than knights are not yet supported");
+  }
+
+    return null;
+}
+export { Piece }

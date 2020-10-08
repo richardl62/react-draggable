@@ -1,53 +1,31 @@
-import React from 'react'
-import { Knight } from './pieces';
+import React from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { Piece } from './pieces';
 import { processSquareClick } from './game';
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import { Square } from './Square';
 
-// function requiredDefined(...args) {
-//     args.forEach(arg => {
-//         if (arg === undefined) {
-//             console.log('required arguments in undefined in', args)
-//             throw new Error('required arguments in undefined in', args);
-//         }
-//     });
-// }
+import './game.css';
 
-function Square({ black, children, onClick }) {
-    const className = 'square' + (black ? ' blackSquare' : '');
-    return (
-        <div className={className} onClick={onClick}>
-            {children}
-        </div>
-    );
-}
 
-function makeBoardSquare(index, boardProps) {
-    const { config, knightPosition } = boardProps;
-    const { nCols, topLeftBlack } = config;
-        
-    const col = index % nCols;
-    const row = Math.floor(index / nCols);
-
-    const isKnight = (row === knightPosition[0]) && (col === knightPosition[1]);
-
-    const sameColorTopleft = (row + col) % 2 === 0;
-    const black = sameColorTopleft ? topLeftBlack : !topLeftBlack;
-    
-    return (
-        <Square black={black} onClick={() => processSquareClick(row, col)} key={index} index={index}>
-            {isKnight ? <Knight /> : null}
-        </Square>
-    );
-}
-
-function Board(props) {
-    const { config } = props;
-    const { nRows, nCols } = config;
+function Board({layout, pieces}) {
+    const nRows = layout.nRows;
+    const nCols = layout.nCols;
 
     let squares = [];
-    for (let index = 0; index < nRows * nCols; ++index) {
-        squares.push(makeBoardSquare(index, props));
+    for (let row = 0; row < nRows; ++row) {
+        for (let col = 0; col < nCols; ++col) {
+            squares.push(
+                <Square 
+                    index={squares.length} 
+                    key={[row, col]} 
+                    black={layout.squareIsBlack(row, col)}
+                    onClick={() => processSquareClick(row, col)}
+                    >
+                    <Piece type={pieces.pieceType(row, col)} />
+                </Square>
+            );
+        }
     }
 
     const style = { // For now
@@ -66,4 +44,4 @@ function Board(props) {
     );
 }
 
-export { Board, Square }
+export { Board }
