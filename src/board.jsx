@@ -5,8 +5,6 @@ import { Piece } from './pieces';
 import { processSquareClick } from './game';
 import { Square } from './Square';
 
-import './game.css';
-
 
 function Board({layout, pieces}) {
     const nRows = layout.nRows;

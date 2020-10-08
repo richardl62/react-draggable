@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import { Board } from './board';
 import {setObserver, boardLayout} from './game';
 import * as serviceWorker from './serviceWorker';
+import './main.css';
 
 const root = document.getElementById('root');
 
