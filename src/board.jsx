@@ -1,10 +1,38 @@
 import React from 'react';
-import { DndProvider } from 'react-dnd';
+import { DndProvider, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Piece } from './pieces';
-import { processSquareClick } from './game';
+import { processSquareClick, knightMove } from './game';
 import { Square } from './Square';
+import { itemTypes } from './constants'
 
+function BoardSquare({ layout, pieces, row, col }) {
+    const [, drop] = useDrop({
+        accept: itemTypes.KNIGHT,
+        drop: () => knightMove(row, col),
+        collect: monitor => ({
+            isOver: !!monitor.isOver(),
+        }),
+    })
+    return (
+        <div ref={drop}
+            style={{
+                position: 'relative',
+                width: '100%',
+                height: '100%',
+            }}
+        >
+            <Square
+                black={layout.squareIsBlack(row, col)}
+                onClick={() => processSquareClick(row, col)}
+            >
+                <Piece type={pieces.pieceType(row, col)} />
+            </Square>
+            
+        </div> 
+        
+    );
+}
 
 function Board({layout, pieces}) {
     const nRows = layout.nRows;
@@ -14,14 +42,14 @@ function Board({layout, pieces}) {
     for (let row = 0; row < nRows; ++row) {
         for (let col = 0; col < nCols; ++col) {
             squares.push(
-                <Square 
+                <BoardSquare 
                     index={squares.length} 
                     key={[row, col]} 
-                    black={layout.squareIsBlack(row, col)}
-                    onClick={() => processSquareClick(row, col)}
-                    >
-                    <Piece type={pieces.pieceType(row, col)} />
-                </Square>
+                    layout={layout}
+                    pieces={pieces}
+                    row={row}
+                    col={col}
+                />
             );
         }
     }

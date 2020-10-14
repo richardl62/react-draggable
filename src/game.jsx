@@ -53,4 +53,4 @@ function processSquareClick(row, col) {
     }
 }
 
-export { setObserver, boardLayout, processSquareClick}
+export { setObserver, boardLayout, knightMove, processSquareClick}
