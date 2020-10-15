@@ -1,8 +1,9 @@
 import React from 'react';
 import { DndProvider, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { TouchBackend } from 'react-dnd-touch-backend';
 import { Piece } from './pieces';
-import { processSquareClick, knightMove } from './game';
+import { knightMove } from './game';
 import { Square } from './Square';
 import { itemTypes } from './constants'
 
@@ -24,7 +25,7 @@ function BoardSquare({ layout, pieces, row, col }) {
         >
             <Square
                 black={layout.squareIsBlack(row, col)}
-                onClick={() => processSquareClick(row, col)}
+                // onClick={() => processSquareClick(row, col)}
             >
                 <Piece type={pieces.pieceType(row, col)} />
             </Square>
@@ -61,8 +62,20 @@ function Board({layout, pieces}) {
         width: 'fit-content',
     };
 
+    let supportTouch = false;
+
+    let backend;
+    let backendOptions = {};
+
+    if(supportTouch) {
+        backend = TouchBackend;
+        backendOptions.enableMouseEvents = true;
+    } else {
+        backend = HTML5Backend;
+    }
+        
     return (
-        <DndProvider backend={HTML5Backend} >
+        <DndProvider backend={backend} opt={backendOptions}>
             <div className="board" style={style}>
                 {squares}
             </div>
