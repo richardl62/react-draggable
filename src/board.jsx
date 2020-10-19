@@ -1,13 +1,12 @@
 import React from 'react';
 import { DndProvider, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { TouchBackend } from 'react-dnd-touch-backend';
+import { itemTypes } from './constants';
 import { Piece } from './pieces';
 import { knightMove } from './game';
 import { Square } from './Square';
-import { itemTypes } from './constants'
 
-function BoardSquare({ layout, pieces, row, col }) {
+function BoardSquare({ corePiece, isBlack, row, col }) {
     const [, drop] = useDrop({
         accept: itemTypes.KNIGHT,
         drop: () => knightMove(row, col),
@@ -23,11 +22,8 @@ function BoardSquare({ layout, pieces, row, col }) {
                 height: '100%',
             }}
         >
-            <Square
-                black={layout.squareIsBlack(row, col)}
-                // onClick={() => processSquareClick(row, col)}
-            >
-                <Piece type={pieces.pieceType(row, col)} />
+            <Square black={isBlack}>
+                <Piece corePiece={corePiece} />
             </Square>
             
         </div> 
@@ -35,7 +31,7 @@ function BoardSquare({ layout, pieces, row, col }) {
     );
 }
 
-function Board({layout, pieces}) {
+function Board({layout}) {
     const nRows = layout.nRows;
     const nCols = layout.nCols;
 
@@ -46,8 +42,8 @@ function Board({layout, pieces}) {
                 <BoardSquare 
                     index={squares.length} 
                     key={[row, col]} 
-                    layout={layout}
-                    pieces={pieces}
+                    isBlack={layout.isBlack(row, col)}
+                    corePiece={layout.piece(row, col)}
                     row={row}
                     col={col}
                 />
@@ -62,20 +58,9 @@ function Board({layout, pieces}) {
         width: 'fit-content',
     };
 
-    let supportTouch = false;
-
-    let backend;
-    let backendOptions = {};
-
-    if(supportTouch) {
-        backend = TouchBackend;
-        backendOptions.enableMouseEvents = true;
-    } else {
-        backend = HTML5Backend;
-    }
         
     return (
-        <DndProvider backend={backend} opt={backendOptions}>
+        <DndProvider backend={HTML5Backend}>
             <div className="board" style={style}>
                 {squares}
             </div>

@@ -1,20 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Board } from './board';
-import {setObserver, boardLayout} from './game';
+import {setObserver } from './game';
 import * as serviceWorker from './serviceWorker';
 import './main.css';
 
 const root = document.getElementById('root');
 
-setObserver(pieces => {
+// Render the board to show 'pieces'.
+function renderBoard(boardLayout) {
   ReactDOM.render(
     <React.StrictMode>
-      <Board layout={boardLayout} pieces={pieces} />
+      <Board layout={boardLayout} />
     </React.StrictMode>,
     root
   );
-});
+}
+
+setObserver(renderBoard);
 
 
 // If you want your app to work offline and load faster, you can change

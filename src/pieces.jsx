@@ -22,19 +22,27 @@ function Knight() {
     }}
   >
     &#x2658;
-  </div>;  // Umicode white knight
+  </div>;  // Unicode white knight
 }
 
-function Piece({type}) {
+function Piece({corePiece}) {
     
-  if(type === itemTypes.KNIGHT) {
-      return <Knight></Knight>
+  if(corePiece === itemTypes.KNIGHT) {
+      return <Knight/>
     }
 
-  if (type) {
-    throw new Error("Pieces other than knights are not yet supported");
+  if (corePiece == null) {
+    return null;
   }
 
-    return null;
+  throw new Error("Pieces other than knights are not yet supported");
 }
-export { Piece }
+
+function makeCorePiece(name) {
+  if(name === 'knight') {
+    return itemTypes.KNIGHT;
+  }
+
+  throw new Error(`Bad name for core piece: ${name}`);
+}
+export { Piece, makeCorePiece }
