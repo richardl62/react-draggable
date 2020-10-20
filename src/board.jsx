@@ -3,13 +3,13 @@ import { DndProvider, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { itemTypes } from './constants';
 import { Piece } from './pieces';
-import { knightMove } from './game';
+import { movePiece } from './game';
 import { Square } from './Square';
 
 function BoardSquare({ corePiece, isBlack, row, col }) {
     const [, drop] = useDrop({
-        accept: itemTypes.KNIGHT,
-        drop: () => knightMove(row, col),
+        accept: itemTypes.PIECE,
+        drop: item => movePiece(item.id, row, col),
         collect: monitor => ({
             isOver: !!monitor.isOver(),
         }),
@@ -23,7 +23,7 @@ function BoardSquare({ corePiece, isBlack, row, col }) {
             }}
         >
             <Square black={isBlack}>
-                <Piece corePiece={corePiece} />
+                {corePiece ? <Piece corePiece={corePiece} /> : null }
             </Square>
             
         </div> 
@@ -40,10 +40,10 @@ function Board({layout}) {
         for (let col = 0; col < nCols; ++col) {
             squares.push(
                 <BoardSquare 
+                    corePiece={layout.corePiece(row, col)}
                     index={squares.length} 
                     key={[row, col]} 
                     isBlack={layout.isBlack(row, col)}
-                    corePiece={layout.piece(row, col)}
                     row={row}
                     col={col}
                 />

@@ -1,7 +1,6 @@
 // Information about games that is indepantant of rendering */
 
 import { boardLayout } from './board_layout';
-import { makeCorePiece } from './pieces';
 let observer = null;
 
 
@@ -14,9 +13,9 @@ function setObserver(o) {
     observer(boardLayout);
 }
 
-function knightMove(toRow, toCol) {
-    boardLayout.piece(toRow, toCol, makeCorePiece('knight'))
+function movePiece(id, toRow, toCol) {
+    boardLayout.movePiece(id, toRow, toCol);
     observer(boardLayout);
 }
 
-export { setObserver, knightMove }
+export { setObserver, movePiece }

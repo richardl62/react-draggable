@@ -1,5 +1,5 @@
 const itemTypes = {
-    KNIGHT: 'a-knight'
+    PIECE: 'piece'
 };
 
 export {itemTypes};

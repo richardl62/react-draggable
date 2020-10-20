@@ -3,46 +3,56 @@ import { useDrag } from 'react-dnd';
 
 import { itemTypes } from './constants';
 
-function Knight() {
+const blackPieceNames = ['bC', 'bK', 'bB', 'bQ', 'bK', 'bP'];
+const whitePieceNames = ['wC', 'wK', 'wB', 'wQ', 'wK', 'wP'];
 
-  const [ {isDragging}, drag ] = useDrag({
-    item: {type: itemTypes.KNIGHT},
-    collect: monitor => ({
-      isDragging: !!monitor.isDragging()
-    }),
+const pieceNames = blackPieceNames.concat(whitePieceNames);
+
+let lastUsedId = 0;
+
+function Piece({corePiece}) {
+
+  const [ , drag ] = useDrag({
+    item: {
+      type: itemTypes.PIECE,
+      id: corePiece.id,
+    },
   });
 
 
   return <div 
     className="piece"
     ref={drag}
-    style={{
-      opacity: isDragging ? 0.5 : 1.0,
-      cursor: 'move',
-    }}
   >
-    &#x2658;
+    {corePiece.name}
   </div>;  // Unicode white knight
 }
 
-function Piece({corePiece}) {
-    
-  if(corePiece === itemTypes.KNIGHT) {
-      return <Knight/>
+class CorePiece {
+  constructor({name, dragBehaviour}) {
+
+    if(!pieceNames.includes(name)) {
+      throw new Error(`CorePiece given unrecognised piece name: ${name}`)
     }
 
-  if (corePiece == null) {
-    return null;
+    if(!['move', 'copy'].includes(dragBehaviour)) {
+      throw new Error(`CorePiece give unrecognised drag behaviour: ${dragBehaviour}`)
+    }
+
+    ++lastUsedId;
+
+    this._id = lastUsedId;  // ? Use Symbol instead ?
+    this._name = name;
+    this._moveWhenDragged = dragBehaviour === 'move';
+    Object.freeze(this);
   }
 
-  throw new Error("Pieces other than knights are not yet supported");
-}
+  get id() {return this._id;}
+  get name() {return this._name;}
 
-function makeCorePiece(name) {
-  if(name === 'knight') {
-    return itemTypes.KNIGHT;
-  }
+  // Exactly one of moveWhenDragged and copyWhenDragged will be true
+  get moveWhenDragged() { return this.__moveWhenDragged; }
+  get copyWhenDragged() { return !this._moveWhenDragged; }
+};
 
-  throw new Error(`Bad name for core piece: ${name}`);
-}
-export { Piece, makeCorePiece }
+export { Piece, CorePiece, blackPieceNames, whitePieceNames }
