@@ -1,7 +1,7 @@
 import { CorePiece } from "./pieces";
 
 
-const standardLayout = [
+let standardLayout = [
     ['bC', 'bK', 'bB', 'bQ', 'bK', 'bB', 'bK', 'bC'],
     ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
     [null, null, null, null, null, null, null, null],
@@ -11,14 +11,22 @@ const standardLayout = [
     ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
     ['wC', 'wK', 'wB', 'wQ', 'wK', 'wB', 'wK', 'wC'],
 ];
+standardLayout.topLeftBlack=true;
+Object.freeze(standardLayout);
+
 
 class BoardLayout {
 
-    constructor() {
-        this._corePieces = standardLayout.map(subArray => subArray.map(
-            name => (name ? new CorePiece({name:name, dragBehaviour:'move'}) : null)
-        ));
-        this._topLeftBlack = false;
+    constructor(toCopy) {
+        if(toCopy) {
+            this._corePieces = toCopy._corePieces;
+            this._topPieces = toCopy._corePieces;
+        } else {
+            this._corePieces = standardLayout.map(subArray => subArray.map(
+                name => (name ? new CorePiece({ name: name, dragBehaviour: 'move' }) : null)
+            ));
+            this._topLeftBlack = false;
+        }
 
         Object.seal(this);
     }
@@ -70,6 +78,4 @@ class BoardLayout {
     }
 }
 
-
-let boardLayout = new BoardLayout();
-export {boardLayout};
+export {BoardLayout};

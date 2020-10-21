@@ -1,21 +1,36 @@
 // Information about games that is indepantant of rendering */
 
-import { boardLayout } from './board_layout';
-let observer = null;
+import React from 'react';
+import { BoardLayout } from './board_layout';
+import { Board } from './board';
 
 
-function setObserver(o) {
-    if (observer) {
-        throw new Error("Multiple observers not supported");
+
+class Game extends React.Component {
+
+    constructor() {
+        super();
+
+        this.state = {boardLayout: new BoardLayout()}
     }
 
-    observer = o;
-    observer(boardLayout);
+    movePiece = (piece, row, col) => {
+        let newBoardLayout = new BoardLayout(this.state.boardLayout);
+        newBoardLayout.movePiece(piece, row, col);
+        
+        this.setState({
+            boardLayout: newBoardLayout,
+        })
+    }
+
+    render() {
+        return (<Board 
+            layout={this.state.boardLayout}
+            movePiece={this.movePiece}
+         />);
+    }
 }
 
-function movePiece(id, toRow, toCol) {
-    boardLayout.movePiece(id, toRow, toCol);
-    observer(boardLayout);
-}
 
-export { setObserver, movePiece }
+
+export { Game }
