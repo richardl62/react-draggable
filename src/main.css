@@ -21,3 +21,7 @@
 .board {
     border: 2px brown solid;
 }
+
+.permanentPieces {
+    display: flex;
+}

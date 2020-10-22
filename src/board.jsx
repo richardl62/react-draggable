@@ -1,6 +1,5 @@
 import React from 'react';
-import { DndProvider, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
+import { useDrop } from 'react-dnd';
 import { itemTypes } from './constants';
 import { Piece } from './pieces';
 import { Square } from './Square';
@@ -60,12 +59,11 @@ function Board({layout, movePiece}) {
 
         
     return (
-        <DndProvider backend={HTML5Backend}>
-            <div className="board" style={style}>
-                {squares}
-            </div>
-        </DndProvider>
-    );
+        <div className="board" style={style}>
+            {squares}
+        </div>
+    )
+
 }
 
 export { Board }
