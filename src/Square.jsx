@@ -1,12 +1,17 @@
 import React from 'react';
 
-export function Square({ black, children/*, onClick */}) {
-    const className = 'square' + (black ? ' blackSquare' : '');
-    return (
-        <div className={className} 
-            // onClick={onClick}
-        >
-            {children}
-        </div>
-    );
+class Square extends React.PureComponent {
+
+    render() {
+        let { black, children } = this.props;
+
+        const className = 'square' + (black ? ' blackSquare' : '');
+        return (
+            <div className={className}>
+                {children}
+            </div>
+        );
+    }
 }
+
+export { Square }
