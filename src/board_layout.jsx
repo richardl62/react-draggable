@@ -35,28 +35,16 @@ class BoardLayout {
     get nCols() {return this._corePieces[0].length;}
 
     // Get or set the core piece at the specified square. Null represents an emoty square.
-    corePiece(row, col) {
+    corePiece(row, col, newPiece) {
         if(this._corePieces[row][col] === undefined) {
             throw new Error(`Invalid row or column number: ${row} ${col}`)
+        }
+
+        if(newPiece !== undefined) {
+            this._corePieces[row][col] = newPiece; 
         }
 
         return this._corePieces[row][col];
-    }
-
-    movePiece(id, row, col) {
-        
-        if(this._corePieces[row][col] === undefined) {
-            throw new Error(`Invalid row or column number: ${row} ${col}`)
-        }
-
-        const from = this.findCorePiecebyId(id);
-
-        if(this._corePieces[row][col] !== from.piece) {
-            this._corePieces[row][col] = from.piece;
-            if(!from.piece.copyWhenDragged) {
-                this._corePieces[from.row][from.col]  = null;
-            }
-        }
     }
 
     isBlack(row, col) {
@@ -74,7 +62,7 @@ class BoardLayout {
             }
         }
     
-        throw new Error(`Cannot find piece to move: ${id}`);
+        return null;
     }
 }
 

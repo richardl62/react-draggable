@@ -3,13 +3,18 @@
 import React from 'react';
 import { BoardLayout } from './board_layout';
 import { Board } from './board';
-import { whitePieceNames, blackPieceNames, Piece, CorePiece } from './pieces';
+import { blackPieceNames, whitePieceNames, Piece, CorePiece } from './pieces';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
-function makeCopyOnDragPiece(name, index) {
-    const cp = new CorePiece({name:name, dragBehaviour:'copy'});
-    return (<Piece index={index} key={cp.id} corePiece={cp} />);
+function PermanentPieces({ corePieces }) {
+    return (
+        <div className="permanentPieces">
+            {corePieces.map(
+                (cp, index) => <Piece corePiece={cp} index={index} key={cp.id} />
+            )}   
+        </div>
+    ); 
 }
 
 class Game extends React.Component {
@@ -18,33 +23,62 @@ class Game extends React.Component {
         super();
 
         this.state = {boardLayout: new BoardLayout()}
+
+        function makeCorePiece(name) {
+            return new CorePiece({name:name, dragBehaviour:'copy'});
+        }
+
+        const bcod = blackPieceNames.map(makeCorePiece);
+        const wcod = whitePieceNames.map(makeCorePiece);
+           
+        this._CopyOnDragPieces = {
+            black: bcod,
+            white: wcod,
+            all: bcod.concat(wcod),
+        };
     }
 
-    movePiece = (piece, row, col) => {
+    movePiece = (pieceId, row, col) => {
+
         let newBoardLayout = new BoardLayout(this.state.boardLayout);
-        newBoardLayout.movePiece(piece, row, col);
-        
+        const bp = newBoardLayout.findCorePiecebyId(pieceId);
+        if ( bp ) {
+            if (row !== bp.row || col !== bp.col) {
+                newBoardLayout.corePiece(row, col, bp.piece);
+                newBoardLayout.corePiece(bp.row, bp.col, null);
+            }
+        } else {
+            const nbp = this._CopyOnDragPieces.all.find(p => p.id === pieceId);
+            if (!nbp) {
+                throw new Error(`Piece with id ${pieceId} not found`);
+            }
+            newBoardLayout.corePiece(row,col, new CorePiece({ name: nbp.name, dragBehaviour: 'move' }))
+        }
+
         this.setState({
             boardLayout: newBoardLayout,
         })
     }
 
     render() {
+
         return (
             <DndProvider backend={HTML5Backend}>
                 <div className="chess-game">
-                    <div class="permanentPieces"> 
-                         {blackPieceNames.map(makeCopyOnDragPiece)} 
-                    </div>
+
+                    <PermanentPieces 
+                        corePieces={this._CopyOnDragPieces.black}     
+                    />
 
                     <Board
                         layout={this.state.boardLayout}
                         movePiece={this.movePiece}
                     />
 
-                    <div class="permanentPieces">
-                        {whitePieceNames.map(makeCopyOnDragPiece)}
-                    </div>
+                    <PermanentPieces 
+                        corePieces={this._CopyOnDragPieces.white}     
+                    />
+
                 </div>
             </DndProvider>
         )
