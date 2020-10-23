@@ -1,34 +1,25 @@
-import { CorePiece } from "./pieces";
-
-
-let standardLayout = [
-    ['bC', 'bK', 'bB', 'bQ', 'bK', 'bB', 'bK', 'bC'],
-    ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
-    ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
-    ['wC', 'wK', 'wB', 'wQ', 'wK', 'wB', 'wK', 'wC'],
-];
-standardLayout.topLeftBlack=true;
-Object.freeze(standardLayout);
-
-
 class BoardLayout {
 
-    constructor(toCopy) {
-        if(toCopy) {
-            this._corePieces = toCopy._corePieces;
-            this._topPieces = toCopy._corePieces;
-        } else {
-            this._corePieces = standardLayout.map(subArray => subArray.map(
-                name => (name ? new CorePiece({ name: name }) : null)
-            ));
-            this._topLeftBlack = false;
+    // Input is of form show below.  Each element is CorePiece or null.
+    // [
+    //     [r0c0, r0c1. ...],
+    //     [r1c0, r1c1. ...], 
+    //     ...
+    // ]
+    constructor(corePieces, topLeftBlack) {
+        if(!(corePieces instanceof Array && typeof topLeftBlack === "boolean")) {
+            throw new Error("Bad input to BoardLayout");
         }
-
+        this._corePieces = corePieces;
+        this._topLeftBlack = topLeftBlack;
         Object.seal(this);
+    }
+
+    copy() {
+        return new BoardLayout(
+            this._corePieces.map(row => [...row]), 
+            this._topLeftBlack
+        );
     }
 
     get nRows() {return this._corePieces.length;}

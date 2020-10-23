@@ -3,9 +3,25 @@
 import React from 'react';
 import { BoardLayout } from './board_layout';
 import { Board } from './board';
-import { blackPieceNames, whitePieceNames, Piece, CorePiece } from './pieces';
+import { blackPieceNames, whitePieceNames, Piece } from './pieces';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+
+import { CorePieceFactory } from "./pieces";
+
+
+let standardLayout = [
+    ['bC', 'bK', 'bB', 'bQ', 'bK', 'bB', 'bK', 'bC'],
+    ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
+    ['wC', 'wK', 'wB', 'wQ', 'wK', 'wB', 'wK', 'wC'],
+];
+standardLayout.topLeftBlack=true;
+Object.freeze(standardLayout);
 
 function PermanentPieces({ corePieces }) {
     return (
@@ -17,30 +33,47 @@ function PermanentPieces({ corePieces }) {
     ); 
 }
 
+function makeBoard(layout, corePieceFactory) {
+
+    const pieces = layout.map(row => row.map(
+        name => corePieceFactory.make(name)
+    ));
+
+    return new BoardLayout(pieces, layout.topLeftBlack)
+}
+
+
 class Game extends React.Component {
 
     constructor() {
         super();
 
-        this.state = {boardLayout: new BoardLayout()}
+        let cpf = new CorePieceFactory();
+        this._corePieceFactory = cpf;
 
-        function makeCorePiece(name) {
-            return new CorePiece({name:name});
+        this.state = {
+            boardLayout: makeBoard(standardLayout, cpf),
         }
 
-        const bcod = blackPieceNames.map(makeCorePiece);
-        const wcod = whitePieceNames.map(makeCorePiece);
+        const bcp = blackPieceNames.map(name => cpf.make(name));
+        const wcp = whitePieceNames.map(name => cpf.make(name));
+
            
-        this._CopyOnDragPieces = {
-            black: bcod,
-            white: wcod,
-            all: bcod.concat(wcod),
+        this._OffBoardCorePieces = {
+            black: bcp,
+            white: wcp,
+            all: bcp.concat(wcp),
         };
+        Object.freeze(this._OffBoardCorePieces);
+    }
+
+    copyPiece(piece) {
+        return this._corePieceFactory.make(piece); 
     }
 
     movePiece = (pieceId, row, col) => {
 
-        let newBoardLayout = new BoardLayout(this.state.boardLayout);
+        let newBoardLayout = this.state.boardLayout.copy();
         const bp = newBoardLayout.findCorePiecebyId(pieceId);
         if ( bp ) {
             if (row !== bp.row || col !== bp.col) {
@@ -48,11 +81,11 @@ class Game extends React.Component {
                 newBoardLayout.corePiece(bp.row, bp.col, null);
             }
         } else {
-            const nbp = this._CopyOnDragPieces.all.find(p => p.id === pieceId);
+            const nbp = this._OffBoardCorePieces.all.find(p => p.id === pieceId);
             if (!nbp) {
                 throw new Error(`Piece with id ${pieceId} not found`);
             }
-            newBoardLayout.corePiece(row,col, new CorePiece({ name: nbp.name }))
+            newBoardLayout.corePiece(row,col, this.copyPiece(nbp))
         }
 
         this.setState({
@@ -67,7 +100,7 @@ class Game extends React.Component {
                 <div className="chess-game">
 
                     <PermanentPieces 
-                        corePieces={this._CopyOnDragPieces.black}     
+                        corePieces={this._OffBoardCorePieces.black}     
                     />
 
                     <Board
@@ -76,7 +109,7 @@ class Game extends React.Component {
                     />
 
                     <PermanentPieces 
-                        corePieces={this._CopyOnDragPieces.white}     
+                        corePieces={this._OffBoardCorePieces.white}     
                     />
 
                 </div>

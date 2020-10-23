@@ -8,11 +8,44 @@ const whitePieceNames = ['wC', 'wK', 'wB', 'wQ', 'wK', 'wP'];
 
 const pieceNames = blackPieceNames.concat(whitePieceNames);
 
-let lastUsedId = 0;
+class CorePiece {
+  constructor(name, id) {
+    this.id = id;
+    this.name = name;
+    Object.freeze(this);
+  }
+};
 
-function Piece({corePiece}) {
+class CorePieceFactory {
 
-  const [ , drag ] = useDrag({
+  constructor() {
+    this._lastUsedId = 0;
+  }
+
+  // Input can be a piece to copy, the name of a piece or null
+  make(input = null) {
+
+    if (input === null) {
+      return null;
+    }
+
+    if(input instanceof CorePiece) {
+      return this.make(input.name);
+    }
+
+    if (!pieceNames.includes(input)) {
+      throw new Error(`CorePieceFactor.make() given unrecognised input: ${input}`)
+    }
+
+    ++this._lastUsedId;
+
+    return new CorePiece(input, this._lastUsedId);
+  }
+}
+
+function Piece({ corePiece }) {
+
+  const [, drag] = useDrag({
     item: {
       type: itemTypes.PIECE,
       id: corePiece.id,
@@ -20,7 +53,7 @@ function Piece({corePiece}) {
   });
 
 
-  return <div 
+  return <div
     className="piece"
     ref={drag}
   >
@@ -28,22 +61,6 @@ function Piece({corePiece}) {
   </div>;  // Unicode white knight
 }
 
-class CorePiece {
-  constructor({name}) {
 
-    if(!pieceNames.includes(name)) {
-      throw new Error(`CorePiece given unrecognised piece name: ${name}`)
-    }
 
-    ++lastUsedId;
-
-    this._id = lastUsedId;  // ? Use Symbol instead ?
-    this._name = name;
-    Object.freeze(this);
-  }
-
-  get id() {return this._id;}
-  get name() {return this._name;}
-};
-
-export { Piece, CorePiece, blackPieceNames, whitePieceNames }
+export { Piece, CorePieceFactory, blackPieceNames, whitePieceNames }
