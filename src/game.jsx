@@ -11,23 +11,27 @@ import { CorePieceFactory } from "./pieces";
 
 
 let standardLayout = [
-    ['bC', 'bK', 'bB', 'bQ', 'bK', 'bB', 'bK', 'bC'],
-    ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
+    [ 'r',  'n',  'b',  'q',  'k',  'b',  'n',  'r'],
+    [ 'p',  'p',  'p',  'p',  'p',  'p',  'p',  'p'],
     [null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null, null],
-    ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
-    ['wC', 'wK', 'wB', 'wQ', 'wK', 'wB', 'wK', 'wC'],
+    [ 'P',  'P',  'P',  'P',  'P',  'P',  'P',  'P'],
+    [ 'R',  'N',  'B',  'Q',  'K',  'B',  'N',  'R'],
 ];
-standardLayout.topLeftBlack=true;
+standardLayout.topLeftBlack=false;
 Object.freeze(standardLayout);
 
 function PermanentPieces({ corePieces }) {
     return (
         <div className="permanentPieces">
             {corePieces.map(
-                (cp, index) => <Piece corePiece={cp} index={index} key={cp.id} />
+                (cp, index) => (
+                    <div>
+                        <Piece corePiece={cp} index={index} key={cp.id} />
+                    </div>
+                )
             )}   
         </div>
     ); 

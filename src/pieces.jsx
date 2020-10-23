@@ -3,8 +3,12 @@ import { useDrag } from 'react-dnd';
 
 import { itemTypes } from './constants';
 
-const blackPieceNames = ['bC', 'bK', 'bB', 'bQ', 'bK', 'bP'];
-const whitePieceNames = ['wC', 'wK', 'wB', 'wQ', 'wK', 'wP'];
+
+import SVGPiece from 'react-chess-pieces';
+
+const blackPieceNames = ['p', 'r',  'n',  'b',  'q',  'k'];
+const whitePieceNames = ['P', 'R',  'N',  'B',  'Q',  'K' ];
+
 
 const pieceNames = blackPieceNames.concat(whitePieceNames);
 
@@ -53,14 +57,12 @@ function Piece({ corePiece }) {
   });
 
 
-  return <div
+  return (<div
     className="piece"
     ref={drag}
   >
-    {corePiece.name}
-  </div>;  // Unicode white knight
+    <SVGPiece piece={corePiece.name} />
+  </div>);  
 }
-
-
 
 export { Piece, CorePieceFactory, blackPieceNames, whitePieceNames }

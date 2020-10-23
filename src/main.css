@@ -4,7 +4,11 @@
     padding: 0;
 }
 
-.square {
+.permanentPieces {
+    display: flex;
+}
+
+.square, .permanentPieces > div {
     width: 50px;
     height: 50px;
 }
@@ -20,8 +24,4 @@
 
 .board {
     border: 2px brown solid;
-}
-
-.permanentPieces {
-    display: flex;
 }
