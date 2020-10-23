@@ -29,38 +29,68 @@ function BoardSquare({ corePiece, movePiece, isBlack, row, col }) {
     );
 }
 
+function Header({nCols}) {
+    let labels = [];
+
+    for(let col=1; col <= nCols; ++col) {
+        labels.push(<div className='label' key={'col'+col}>{col}</div>)
+    }
+
+    return (<div className="board-label">
+        <div></div>
+        {labels}
+        <div></div>
+    </div>);
+}
+
+function Row({ layout, row, movePiece }) {
+
+    let squares = [];
+
+    for (let col = 0; col < layout.nCols; ++col) {
+        squares.push(
+            <BoardSquare
+                index={col}
+                key={col}
+
+                corePiece={layout.corePiece(row, col)}
+                movePiece={movePiece}
+                isBlack={layout.isBlack(row, col)}
+
+                row={row}
+                col={col}
+            />
+        );
+    }
+
+    return <div className='board-row'>
+        <div className='label'>{row}</div>
+        {squares}
+        <div className='label'>{row}</div>
+    </div>
+}
+
 function Board({layout, movePiece}) {
     const nRows = layout.nRows;
     const nCols = layout.nCols;
 
-    let squares = [];
+    let rows = [];
     for (let row = 0; row < nRows; ++row) {
-        for (let col = 0; col < nCols; ++col) {
-            squares.push(
-                <BoardSquare 
-                    corePiece={layout.corePiece(row, col)}
-                    movePiece={movePiece}
-                    index={squares.length} 
-                    key={[row, col]} 
-                    isBlack={layout.isBlack(row, col)}
-                    row={row}
-                    col={col}
-                />
-            );
-        }
+        rows.push(
+            <Row
+                key={'row'+row}
+                layout={layout}
+                row={row}
+                movePiece={movePiece}
+            />
+        );
     }
 
-    const style = { // For now
-        display: 'grid',
-        gridTemplateColumns: `repeat(${nCols},50px)`,
-        gridTemplateRows: `repeat(${nRows},50px)`,
-        width: 'fit-content',
-    };
-
-        
     return (
-        <div className="board" style={style}>
-            {squares}
+        <div className="board">
+            <Header key='h1' nCols={nCols} />
+            {rows}
+            <Header key='h2' nCols={nCols} />
         </div>
     )
 
