@@ -23,7 +23,7 @@ class BoardLayout {
             this._topPieces = toCopy._corePieces;
         } else {
             this._corePieces = standardLayout.map(subArray => subArray.map(
-                name => (name ? new CorePiece({ name: name, dragBehaviour: 'move' }) : null)
+                name => (name ? new CorePiece({ name: name }) : null)
             ));
             this._topLeftBlack = false;
         }

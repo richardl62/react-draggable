@@ -25,7 +25,7 @@ class Game extends React.Component {
         this.state = {boardLayout: new BoardLayout()}
 
         function makeCorePiece(name) {
-            return new CorePiece({name:name, dragBehaviour:'copy'});
+            return new CorePiece({name:name});
         }
 
         const bcod = blackPieceNames.map(makeCorePiece);
@@ -52,7 +52,7 @@ class Game extends React.Component {
             if (!nbp) {
                 throw new Error(`Piece with id ${pieceId} not found`);
             }
-            newBoardLayout.corePiece(row,col, new CorePiece({ name: nbp.name, dragBehaviour: 'move' }))
+            newBoardLayout.corePiece(row,col, new CorePiece({ name: nbp.name }))
         }
 
         this.setState({
