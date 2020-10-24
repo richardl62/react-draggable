@@ -25,7 +25,7 @@ Object.freeze(standardLayout);
 
 function PermanentPieces({ corePieces }) {
     return (
-        <div className="permanentPieces">
+        <div className='permanent-pieces'>
             {corePieces.map(
                 (cp, index) => (
                     <div index={index} key={index}>
@@ -101,7 +101,7 @@ class Game extends React.Component {
 
         return (
             <DndProvider backend={HTML5Backend}>
-                <div className="chess-game">
+                <div className="game">
 
                     <PermanentPieces 
                         corePieces={this._OffBoardCorePieces.black}     

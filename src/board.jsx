@@ -29,26 +29,22 @@ function BoardSquare({ corePiece, movePiece, isBlack, row, col }) {
     );
 }
 
-function Header({nCols}) {
-    let labels = [];
-
+function addHeader(nCols, elems) {
+    elems.push(<div />);
     for(let col=1; col <= nCols; ++col) {
-        labels.push(<div className='label' key={'col'+col}>{col}</div>)
+        elems.push(<div className='column-number' key={'col'+col}>{col}</div>)
     }
-
-    return (<div className="board-label">
-        <div></div>
-        {labels}
-        <div></div>
-    </div>);
+    elems.push(<div />);
 }
 
-function Row({ layout, row, movePiece }) {
+function addRow(layout, row, movePiece, elems) {
 
-    let squares = [];
+    const letter = String.fromCharCode(65+row);
 
+    elems.push(<div className='row-letter'>{letter}</div>);
+    
     for (let col = 0; col < layout.nCols; ++col) {
-        squares.push(
+        elems.push(
             <BoardSquare
                 index={col}
                 key={col}
@@ -63,34 +59,30 @@ function Row({ layout, row, movePiece }) {
         );
     }
 
-    return <div className='board-row'>
-        <div className='label'>{row}</div>
-        {squares}
-        <div className='label'>{row}</div>
-    </div>
+    elems.push(<div className='row-letter'>{letter}</div>);
 }
 
 function Board({layout, movePiece}) {
     const nRows = layout.nRows;
     const nCols = layout.nCols;
 
-    let rows = [];
+    let elems = [];
+
+    addHeader(nCols,elems);
     for (let row = 0; row < nRows; ++row) {
-        rows.push(
-            <Row
-                key={'row'+row}
-                layout={layout}
-                row={row}
-                movePiece={movePiece}
-            />
-        );
+        addRow(layout, row, movePiece, elems);
     }
+    addHeader(nCols,elems);
+
+    const style = { // For now
+        display: 'grid',
+        gridTemplateColumns: `repeat(${nCols+2},auto)`,
+        gridTemplateRows: `repeat(${nRows+2},auto)`,
+    };
 
     return (
-        <div className="board">
-            <Header key='h1' nCols={nCols} />
-            {rows}
-            <Header key='h2' nCols={nCols} />
+        <div className="board" style={style}>
+            {elems}
         </div>
     )
 

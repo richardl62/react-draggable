@@ -6,8 +6,8 @@ import { itemTypes } from './constants';
 
 import SVGPiece from 'react-chess-pieces';
 
-const blackPieceNames = ['p', 'r',  'n',  'b',  'q',  'k'];
-const whitePieceNames = ['P', 'R',  'N',  'B',  'Q',  'K' ];
+const blackPieceNames = ['p', 'n',  'b',  'r',  'q',  'k'];
+const whitePieceNames = ['P', 'N',  'B',  'R',  'Q',  'K' ];
 
 
 const pieceNames = blackPieceNames.concat(whitePieceNames);
