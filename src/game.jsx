@@ -28,7 +28,7 @@ function PermanentPieces({ corePieces }) {
         <div className='permanent-pieces'>
             {corePieces.map(
                 (cp, index) => (
-                    <div index={index} key={index}>
+                    <div className='square' index={index} key={index}>
                         <Piece corePiece={cp} />
                     </div>
                 )
