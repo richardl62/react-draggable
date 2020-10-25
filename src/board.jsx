@@ -29,25 +29,42 @@ function BoardSquare({ corePiece, movePiece, isBlack, row, col }) {
     );
 }
 
-function addHeader(nCols, elems) {
-    elems.push(<div />);
-    for(let col=1; col <= nCols; ++col) {
-        elems.push(<div className='column-number' key={'col'+col}>{col}</div>)
+function addHeader(nCols, elems, rowName) {
+    const key = elemName => rowName + '-' + elemName;
+    elems.push(<div key={key('start')} />);
+    for (let col = 1; col <= nCols; ++col) {
+        elems.push(
+            <div
+                key={key(col)}
+                className='column-number'
+            >
+                {col}
+            </div>
+        );
     }
-    elems.push(<div />);
+    elems.push(<div key={key('end')} />);
 }
 
 function addRow(layout, row, movePiece, elems) {
 
+    const key = elemName =>  'r' + row + '-' + elemName;
+    
     const letter = String.fromCharCode(65+row);
 
-    elems.push(<div className='row-letter'>{letter}</div>);
+    elems.push(
+        <div
+            key={key('start')}
+            className='row-letter'
+        >
+            {letter}
+        </div>
+    );
     
     for (let col = 0; col < layout.nCols; ++col) {
         elems.push(
             <BoardSquare
                 index={col}
-                key={col}
+                key={key(col)}
 
                 corePiece={layout.corePiece(row, col)}
                 movePiece={movePiece}
@@ -59,7 +76,14 @@ function addRow(layout, row, movePiece, elems) {
         );
     }
 
-    elems.push(<div className='row-letter'>{letter}</div>);
+    elems.push(
+        <div
+            key={key('end')}
+            className='row-letter'
+        >
+            {letter}
+        </div>
+    );
 }
 
 function Board({layout, movePiece}) {
@@ -68,11 +92,11 @@ function Board({layout, movePiece}) {
 
     let elems = [];
 
-    addHeader(nCols,elems);
+    addHeader(nCols, elems, 'top');
     for (let row = 0; row < nRows; ++row) {
         addRow(layout, row, movePiece, elems);
     }
-    addHeader(nCols,elems);
+    addHeader(nCols, elems, 'bottom');
 
     const style = { // For now
         display: 'grid',
