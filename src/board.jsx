@@ -1,33 +1,7 @@
 import React from 'react';
-import { useDrop } from 'react-dnd';
-import { itemTypes } from './constants';
-import { Piece } from './pieces';
-import { Square } from './Square';
+import BoardSquare  from './Square';
 
-function BoardSquare({ corePiece, movePiece, isBlack, row, col }) {
-    const [, drop] = useDrop({
-        accept: itemTypes.PIECE,
-        drop: item => movePiece(item.id, row, col),
-        collect: monitor => ({
-            isOver: !!monitor.isOver(),
-        }),
-    })
-    return (
-        <div ref={drop}
-            style={{
-                position: 'relative',
-                width: '100%',
-                height: '100%',
-            }}
-        >
-            <Square black={isBlack}>
-                {corePiece ? <Piece corePiece={corePiece} /> : null }
-            </Square>
-            
-        </div> 
-        
-    );
-}
+
 
 function addHeader(nCols, elems, rowName) {
     const key = elemName => rowName + '-' + elemName;
