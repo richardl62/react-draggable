@@ -1,7 +1,5 @@
 import React from 'react';
-import BoardSquare  from './Square';
-
-
+import BoardSquare  from './square';
 
 function addHeader(nCols, elems, rowName) {
     const key = elemName => rowName + '-' + elemName;
