@@ -47,7 +47,7 @@ class CorePieceFactory {
   }
 }
 
-function Piece({ corePiece }) {
+function Piece({ corePiece, gameCallbacks }) {
 
   const [, drag] = useDrag({
     item: {
@@ -55,7 +55,7 @@ function Piece({ corePiece }) {
       id: corePiece.id,
     },
     begin: () => console.log(`Drag begin ${corePiece.id}`),
-    end: (item, monitor) => console.log(`Drag end ${corePiece.id}`,item, monitor.didDrop()),
+    end: (item, monitor) => gameCallbacks.dragEnd(corePiece.id, monitor.didDrop()),
   });
 
 

@@ -16,7 +16,7 @@ class SimpleSquare extends React.PureComponent {
     }
 }
 
-function BoardSquare({ corePiece, gameCallbacks, isBlack, row, col }) {
+function DroppabledSquare({ corePiece, gameCallbacks, isBlack, row, col }) {
     const [, drop] = useDrop({
         accept: itemTypes.PIECE,
         drop: item => gameCallbacks.movePiece(item.id, row, col),
@@ -33,7 +33,7 @@ function BoardSquare({ corePiece, gameCallbacks, isBlack, row, col }) {
             }}
         >
             <SimpleSquare black={isBlack}>
-                {corePiece ? <Piece corePiece={corePiece} /> : null}
+                {corePiece ? <Piece corePiece={corePiece} gameCallbacks={gameCallbacks} /> : null}
             </SimpleSquare>
 
         </div>
@@ -41,4 +41,4 @@ function BoardSquare({ corePiece, gameCallbacks, isBlack, row, col }) {
     );
 }
 
-export default BoardSquare;
+export default DroppabledSquare;

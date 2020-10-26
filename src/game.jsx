@@ -23,13 +23,14 @@ let standardLayout = [
 standardLayout.topLeftBlack=false;
 Object.freeze(standardLayout);
 
-function PermanentPieces({ corePieces }) {
+function PermanentPieces({ corePieces, gameCallbacks }) {
     return (
         <div className='permanent-pieces'>
             {corePieces.map(
                 (cp, index) => (
                     <div className='square' index={index} key={index}>
-                        <Piece corePiece={cp} />
+                        <Piece corePiece={cp} gameCallbacks={gameCallbacks} />
+
                     </div>
                 )
             )}   
@@ -68,6 +69,12 @@ class Game extends React.Component {
             white: wcp,
             all: bcp.concat(wcp),
         };
+
+        this._callbacks = {
+            movePiece: (...args) => this.movePiece(...args),
+            dragEnd: (...args) => this.dragEnd(...args),
+        };
+
         Object.freeze(this._OffBoardCorePieces);
     }
 
@@ -75,7 +82,7 @@ class Game extends React.Component {
         return this._corePieceFactory.make(piece); 
     }
 
-    movePiece = (pieceId, row, col) => {
+    movePiece(pieceId, row, col)  {
 
         let newBoardLayout = this.state.boardLayout.copy();
         const bp = newBoardLayout.findCorePiecebyId(pieceId);
@@ -97,6 +104,21 @@ class Game extends React.Component {
         })
     }
 
+    dragEnd(pieceId, dropped) {
+        if (!dropped) {
+            // The piece was dragged off the board. Now clear it.
+            const bp = this.state.boardLayout.findCorePiecebyId(pieceId);
+            if (bp) {
+                let newBoardLayout = this.state.boardLayout.copy();
+                newBoardLayout.corePiece(bp.row, bp.col, null);
+                
+                this.setState({
+                    boardLayout: newBoardLayout,
+                })
+            }
+        }
+    }
+
     render() {
 
         return (
@@ -104,16 +126,18 @@ class Game extends React.Component {
                 <div className="game">
 
                     <PermanentPieces 
-                        corePieces={this._OffBoardCorePieces.black}     
+                        corePieces={this._OffBoardCorePieces.black}
+                        gameCallbacks={this._callbacks}     
                     />
 
                     <Board
                         layout={this.state.boardLayout}
-                        gameCallbacks={this}
+                        gameCallbacks={this._callbacks}
                     />
 
                     <PermanentPieces 
-                        corePieces={this._OffBoardCorePieces.white}     
+                        corePieces={this._OffBoardCorePieces.white}
+                        gameCallbacks={this._callbacks}     
                     />
 
                 </div>
