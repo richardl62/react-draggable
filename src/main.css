@@ -47,8 +47,8 @@
     width: 100%;
 }
 
-.being-dragged {
-    border: 5px solid yellow;
+.board .square:hover  {
+    border: 4px solid rgb(200 200 100);
 }
 
 
