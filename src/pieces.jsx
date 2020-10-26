@@ -49,21 +49,28 @@ class CorePieceFactory {
 
 function Piece({ corePiece, gameCallbacks }) {
 
-  const [, drag] = useDrag({
+  const [ {isDragging}, drag] = useDrag({
     item: {
       type: itemTypes.PIECE,
       id: corePiece.id,
     },
-    begin: () => console.log(`Drag begin ${corePiece.id}`),
+    collect: monitor => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+    begin: () => gameCallbacks.dragStart(corePiece.id),
     end: (item, monitor) => gameCallbacks.dragEnd(corePiece.id, monitor.didDrop()),
   });
 
+  let className = "piece";
+  if(isDragging) {
+      className += " being-dragged";
+  }
 
   return (<div
-    className="piece"
+    className={className}
     ref={drag}
   >
-    <SVGPiece piece={corePiece.name} />
+    {isDragging ? null : <SVGPiece piece={corePiece.name} /> }
   </div>);  
 }
 

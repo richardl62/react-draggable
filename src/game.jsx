@@ -73,6 +73,7 @@ class Game extends React.Component {
         this._callbacks = {
             movePiece: (...args) => this.movePiece(...args),
             dragEnd: (...args) => this.dragEnd(...args),
+            dragStart: (...args) => this.dragStart(...args),
         };
 
         Object.freeze(this._OffBoardCorePieces);
@@ -117,6 +118,10 @@ class Game extends React.Component {
                 })
             }
         }
+    }
+
+    dragStart(pieceId) {
+        console.log("Starting drag:", pieceId);
     }
 
     render() {
