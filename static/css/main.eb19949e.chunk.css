@@ -1,2 +1,0 @@
-*{box-sizing:border-box;margin:0;padding:0}.game{display:inline-flex;flex-direction:column;margin-left:5%}.board,.game{align-items:center}.board{justify-items:center;background-color:#006400;width:"fit-content";grid-gap:2px}.black-square{background-color:#009600}.white-square{background-color:#f0fff0}.column-number,.row-letter{color:#fff;padding:2px}.permanent-pieces{display:flex;margin:5px}.square{width:50px;height:50px}.board-label,.board-row{display:flex}
-/*# sourceMappingURL=main.eb19949e.chunk.css.map */
