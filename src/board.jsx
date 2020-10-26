@@ -4,13 +4,13 @@ import BoardSquare  from './square';
 function addHeader(nCols, elems, rowName) {
     const key = elemName => rowName + '-' + elemName;
     elems.push(<div key={key('start')} />);
-    for (let col = 1; col <= nCols; ++col) {
+    for (let col = 0; col < nCols; ++col) {
         elems.push(
             <div
                 key={key(col)}
-                className='column-number'
+                className='board-boarder'
             >
-                {col}
+                {String.fromCharCode(65+col)}
             </div>
         );
     }
@@ -20,15 +20,13 @@ function addHeader(nCols, elems, rowName) {
 function addRow(layout, row, gameCallbacks, elems) {
 
     const key = elemName =>  'r' + row + '-' + elemName;
-    
-    const letter = String.fromCharCode(65+row);
 
     elems.push(
         <div
             key={key('start')}
-            className='row-letter'
+            className='board-boarder'
         >
-            {letter}
+            {row+1}
         </div>
     );
     
@@ -51,9 +49,9 @@ function addRow(layout, row, gameCallbacks, elems) {
     elems.push(
         <div
             key={key('end')}
-            className='row-letter'
+            className='board-boarder'
         >
-            {letter}
+            {row+1}
         </div>
     );
 }
