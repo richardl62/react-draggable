@@ -74,6 +74,7 @@ class Game extends React.Component {
             movePiece: (...args) => this.movePiece(...args),
             dragEnd: (...args) => this.dragEnd(...args),
             dragStart: (...args) => this.dragStart(...args),
+            dragBehaviour: (...args) => this.dragBehaviour(...args),
         };
 
         Object.freeze(this._OffBoardCorePieces);
@@ -121,7 +122,16 @@ class Game extends React.Component {
     }
 
     dragStart(pieceId) {
-        console.log("Starting drag:", pieceId);
+        // console.log("Starting drag:", pieceId);
+    }
+
+    dragBehaviour(pieceId) {
+        const onBoard = Boolean(this.state.boardLayout.findCorePiecebyId(pieceId));
+    
+        return {
+            move: onBoard,
+            copy: !onBoard,
+        };
     }
 
     render() {

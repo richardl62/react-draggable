@@ -49,7 +49,7 @@ class CorePieceFactory {
 
 function Piece({ corePiece, gameCallbacks }) {
 
-  const [ {isDragging}, drag] = useDrag({
+  const [ {isDragging} , drag] = useDrag({
     item: {
       type: itemTypes.PIECE,
       id: corePiece.id,
@@ -60,18 +60,19 @@ function Piece({ corePiece, gameCallbacks }) {
     begin: () => gameCallbacks.dragStart(corePiece.id),
     end: (item, monitor) => gameCallbacks.dragEnd(corePiece.id, monitor.didDrop()),
   });
-
-  let className = "piece";
-  if(isDragging) {
-      className += " being-dragged";
+  
+  if(isDragging && gameCallbacks.dragBehaviour(corePiece.id).move) {
+      return (<div className="piece-div being-dragged" ref={drag}/>);
+  } else {
+    return (
+      <div
+        className='piece-div'
+        ref={drag}
+      >
+         <SVGPiece piece={corePiece.name} />
+      </div>
+    );  
   }
-
-  return (<div
-    className={className}
-    ref={drag}
-  >
-    {isDragging ? null : <SVGPiece piece={corePiece.name} /> }
-  </div>);  
 }
 
 export { Piece, CorePieceFactory, blackPieceNames, whitePieceNames }
