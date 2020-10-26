@@ -109,7 +109,7 @@ class Game extends React.Component {
 
                     <Board
                         layout={this.state.boardLayout}
-                        movePiece={this.movePiece}
+                        gameCallbacks={this}
                     />
 
                     <PermanentPieces 

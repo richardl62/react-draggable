@@ -54,6 +54,8 @@ function Piece({ corePiece }) {
       type: itemTypes.PIECE,
       id: corePiece.id,
     },
+    begin: () => console.log(`Drag begin ${corePiece.id}`),
+    end: (item, monitor) => console.log(`Drag end ${corePiece.id}`,item, monitor.didDrop()),
   });
 
 

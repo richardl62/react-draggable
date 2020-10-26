@@ -16,10 +16,10 @@ class SimpleSquare extends React.PureComponent {
     }
 }
 
-function BoardSquare({ corePiece, movePiece, isBlack, row, col }) {
+function BoardSquare({ corePiece, gameCallbacks, isBlack, row, col }) {
     const [, drop] = useDrop({
         accept: itemTypes.PIECE,
-        drop: item => movePiece(item.id, row, col),
+        drop: item => gameCallbacks.movePiece(item.id, row, col),
         collect: monitor => ({
             isOver: !!monitor.isOver(),
         }),
