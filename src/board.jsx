@@ -1,6 +1,7 @@
 import React from 'react';
 import BoardSquare  from './square';
 
+
 function addHeader(nCols, elems, rowName) {
     const key = elemName => rowName + '-' + elemName;
     elems.push(<div key={key('start')} />);
@@ -8,7 +9,7 @@ function addHeader(nCols, elems, rowName) {
         elems.push(
             <div
                 key={key(col)}
-                className='board-boarder'
+                className='board-boarder board-boarder-letter'
             >
                 {String.fromCharCode(65+col)}
             </div>
@@ -24,7 +25,7 @@ function addRow(layout, row, gameCallbacks, elems) {
     elems.push(
         <div
             key={key('start')}
-            className='board-boarder'
+            className='board-boarder board-boarder-number'
         >
             {row+1}
         </div>
@@ -49,7 +50,7 @@ function addRow(layout, row, gameCallbacks, elems) {
     elems.push(
         <div
             key={key('end')}
-            className='board-boarder'
+            className='board-boarder board-boarder-number'
         >
             {row+1}
         </div>

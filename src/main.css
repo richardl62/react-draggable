@@ -29,7 +29,16 @@
 
 .board-boarder {
     color:white;
-    padding: 2px;
+    font-family: verdana;
+    padding: 3px 5px;
+}
+
+.board-boarder-letter {
+    font-size: 20px;
+}
+
+.board-boarder-number {
+    font-size: 25px;
 }
 
 .permanent-pieces {
@@ -47,7 +56,7 @@
     width: 100%;
 }
 
-.board .square:hover  {
+.board .square:hover:active  {
     border: 4px solid rgb(200 200 100);
 }
 
