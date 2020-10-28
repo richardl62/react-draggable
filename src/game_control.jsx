@@ -5,11 +5,15 @@ function GameControl({gameOptions}) {
         <div className="game-control" >
             <div className="game-type">
                 <label>
-                    <input type="radio" name="game-type" selected />
+                    <input type="radio" name="game-type"
+                        onClick={gameOptions.boardLayout('standard')}   
+                    />
                     Standard
                 </label>
                 <label>
-                    <input type="radio" name="game-type" />
+                    <input type="radio" name="game-type"
+                        onClick={gameOptions.boardLayout('fiveASide')}   
+                    />
                     5-a-side
                 </label>
             </div>

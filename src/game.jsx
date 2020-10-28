@@ -13,19 +13,31 @@ import  GameControl from './game_control';
 
 import { CorePieceFactory } from "./pieces";
 
+const layouts = {
+    standard: [
+        ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
+        ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null, null],
+        ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+        ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+    ],
 
-let standardLayout = [
-    [ 'r',  'n',  'b',  'q',  'k',  'b',  'n',  'r'],
-    [ 'p',  'p',  'p',  'p',  'p',  'p',  'p',  'p'],
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
-    [null, null, null, null, null, null, null, null],
-    [ 'P',  'P',  'P',  'P',  'P',  'P',  'P',  'P'],
-    [ 'R',  'N',  'B',  'Q',  'K',  'B',  'N',  'R'],
-];
-standardLayout.topLeftBlack=false;
-Object.freeze(standardLayout);
+    fiveASide: [
+        ['r', 'n', 'b', 'q', 'k'],
+        ['p', 'p', 'p', 'p', 'p'],
+        [null, null, null, null, null],
+        [null, null, null, null, null],
+        ['P', 'P', 'P', 'P', 'P'],
+        ['R', 'N', 'B', 'Q', 'K'],
+    ]
+}
+
+const defaultLayoutName = 'fiveASide';
+const defaultTopLeftBlack = false;
+
 
 function PermanentPieces({ corePieces, gameOptions }) {
     return (
@@ -41,15 +53,20 @@ function PermanentPieces({ corePieces, gameOptions }) {
     ); 
 }
 
-function makeBoard(layout, corePieceFactory) {
-
+function makeBoardState(layoutName, cpf) {
+    const layout = layouts[layoutName];
+    if(!layout) {
+        throw new Error(`Unrecognised board layout name: ${layoutName}`);
+    }
     const pieces = layout.map(row => row.map(
-        name => corePieceFactory.make(name)
+        name => cpf.make(name)
     ));
 
-    return new BoardLayout(pieces, layout.topLeftBlack)
+    return {
+        layoutName: layoutName,
+        boardLayout: new BoardLayout(pieces, defaultTopLeftBlack),
+    };
 }
-
 
 class Game extends React.Component {
 
@@ -59,9 +76,7 @@ class Game extends React.Component {
         let cpf = new CorePieceFactory();
         this._corePieceFactory = cpf;
 
-        this.state = {
-            boardLayout: makeBoard(standardLayout, cpf),
-        }
+        this.state = makeBoardState(defaultLayoutName, cpf);
 
         const bcp = blackPieceNames.map(name => cpf.make(name));
         const wcp = whitePieceNames.map(name => cpf.make(name));
@@ -72,8 +87,12 @@ class Game extends React.Component {
             white: wcp,
             all: bcp.concat(wcp),
         };
-
         Object.freeze(this._OffBoardCorePieces);
+    }
+
+    boardLayout(layoutName) {
+        console.log("Selected layout:", layoutName);
+        //this.setState(makeBoardState(layoutName, this._corePieceFactory));
     }
 
     movePiece(pieceId, row, col)  {
