@@ -28,10 +28,10 @@ class SimpleSquare extends React.PureComponent {
     }
 }
 
-function DroppableSquare({ corePiece, gameCallbacks, color, row, col }) {
+function DroppableSquare({ corePiece, gameOptions, color, row, col }) {
     const [, drop] = useDrop({
         accept: itemTypes.PIECE,
-        drop: item => gameCallbacks.movePiece(item.id, row, col),
+        drop: item => gameOptions.movePiece(item.id, row, col),
         collect: monitor => ({
             isOver: !!monitor.isOver(),
         }),
@@ -45,7 +45,7 @@ function DroppableSquare({ corePiece, gameCallbacks, color, row, col }) {
             }}
         >
             <SimpleSquare color={color}>
-                {corePiece ? <Piece corePiece={corePiece} gameCallbacks={gameCallbacks} /> : null}
+                {corePiece ? <Piece corePiece={corePiece} gameOptions={gameOptions} /> : null}
             </SimpleSquare>
 
         </div>

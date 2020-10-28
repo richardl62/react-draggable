@@ -1,6 +1,6 @@
 import React from 'react';
 
-function GameControl({callbacks}) {
+function GameControl({gameOptions}) {
     return (
         <div className="game-control" >
             <div className="game-type">

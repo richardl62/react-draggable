@@ -18,7 +18,7 @@ function addHeader(nCols, elems, rowName) {
     elems.push(<div key={key('end')} />);
 }
 
-function addRow(layout, row, gameCallbacks, elems) {
+function addRow(layout, row, gameOptions, elems) {
 
     const key = elemName =>  'r' + row + '-' + elemName;
 
@@ -42,7 +42,7 @@ function addRow(layout, row, gameCallbacks, elems) {
                 key={key(col)}
 
                 corePiece={layout.corePiece(row, col)}
-                gameCallbacks={gameCallbacks}
+                gameOptions={gameOptions}
 
                 color={color}
 
@@ -62,7 +62,7 @@ function addRow(layout, row, gameCallbacks, elems) {
     );
 }
 
-function Board({layout, gameCallbacks}) {
+function Board({layout, gameOptions}) {
     const nRows = layout.nRows;
     const nCols = layout.nCols;
 
@@ -70,7 +70,7 @@ function Board({layout, gameCallbacks}) {
 
     addHeader(nCols, elems, 'top');
     for (let row = 0; row < nRows; ++row) {
-        addRow(layout, row, gameCallbacks, elems);
+        addRow(layout, row, gameOptions, elems);
     }
     addHeader(nCols, elems, 'bottom');
 

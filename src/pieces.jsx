@@ -46,7 +46,7 @@ class CorePieceFactory {
   }
 }
 
-function Piece({ corePiece, gameCallbacks }) {
+function Piece({ corePiece, gameOptions }) {
 
   const [{ isDragging }, drag ] = useDrag({
     item: {
@@ -56,11 +56,11 @@ function Piece({ corePiece, gameCallbacks }) {
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
     }),
-    begin: () => gameCallbacks.dragStart(corePiece.id),
-    end: (item, monitor) => gameCallbacks.dragEnd(corePiece.id, monitor.didDrop()),
+    begin: () => gameOptions.dragStart(corePiece.id),
+    end: (item, monitor) => gameOptions.dragEnd(corePiece.id, monitor.didDrop()),
   });
 
-  if (isDragging && gameCallbacks.dragBehaviour(corePiece.id).move) {
+  if (isDragging && gameOptions.dragBehaviour(corePiece.id).move) {
     /* Hide the original piece when moving */
     return null;
   }

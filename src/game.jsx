@@ -27,13 +27,13 @@ let standardLayout = [
 standardLayout.topLeftBlack=false;
 Object.freeze(standardLayout);
 
-function PermanentPieces({ corePieces, gameCallbacks }) {
+function PermanentPieces({ corePieces, gameOptions }) {
     return (
         <div className='permanent-pieces'>
             {corePieces.map(
                 (cp, index) => (
                     <SimpleSquare key={index}>
-                        <Piece corePiece={cp} gameCallbacks={gameCallbacks} />
+                        <Piece corePiece={cp} gameOptions={gameOptions} />
                     </SimpleSquare>
                 )
             )}   
@@ -73,18 +73,7 @@ class Game extends React.Component {
             all: bcp.concat(wcp),
         };
 
-        this._callbacks = {
-            movePiece: (...args) => this.movePiece(...args),
-            dragEnd: (...args) => this.dragEnd(...args),
-            dragStart: (...args) => this.dragStart(...args),
-            dragBehaviour: (...args) => this.dragBehaviour(...args),
-        };
-
         Object.freeze(this._OffBoardCorePieces);
-    }
-
-    copyPiece(piece) {
-        return this._corePieceFactory.make(piece); 
     }
 
     movePiece(pieceId, row, col)  {
@@ -101,7 +90,9 @@ class Game extends React.Component {
             if (!nbp) {
                 throw new Error(`Piece with id ${pieceId} not found`);
             }
-            newBoardLayout.corePiece(row,col, this.copyPiece(nbp))
+
+            const copiedPiece = this._corePieceFactory.make(nbp); 
+            newBoardLayout.corePiece(row,col, copiedPiece)
         }
 
         this.setState({
@@ -144,17 +135,17 @@ class Game extends React.Component {
 
                     <PermanentPieces
                         corePieces={this._OffBoardCorePieces.black}
-                        gameCallbacks={this._callbacks}
+                        gameOptions={this}
                     />
 
                     <Board
                         layout={this.state.boardLayout}
-                        gameCallbacks={this._callbacks}
+                        gameOptions={this}
                     />
 
                     <PermanentPieces
                         corePieces={this._OffBoardCorePieces.white}
-                        gameCallbacks={this._callbacks}
+                        gameOptions={this}
                     />
                 </div>
             </DndProvider>
@@ -166,7 +157,7 @@ class Game extends React.Component {
         return (
             <>
             {this.renderMainGame()}
-            <GameControl />
+            <GameControl gameOptions={this}/>
             </>
 
         )
