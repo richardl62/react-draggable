@@ -1,11 +1,15 @@
 // Information about games that is indepantant of rendering */
 
 import React from 'react';
-import { BoardLayout } from './board_layout';
-import { Board } from './board';
-import { blackPieceNames, whitePieceNames, Piece } from './pieces';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+
+import { BoardLayout } from './board_layout';
+import { Board } from './board';
+import { SimpleSquare } from './square'
+import { blackPieceNames, whitePieceNames, Piece } from './pieces';
+import  GameControl from './game_control';
+
 
 import { CorePieceFactory } from "./pieces";
 
@@ -28,10 +32,9 @@ function PermanentPieces({ corePieces, gameCallbacks }) {
         <div className='permanent-pieces'>
             {corePieces.map(
                 (cp, index) => (
-                    <div className='square' index={index} key={index}>
+                    <SimpleSquare key={index}>
                         <Piece corePiece={cp} gameCallbacks={gameCallbacks} />
-
-                    </div>
+                    </SimpleSquare>
                 )
             )}   
         </div>
@@ -134,15 +137,14 @@ class Game extends React.Component {
         };
     }
 
-    render() {
-
+    renderMainGame() {
         return (
             <DndProvider backend={HTML5Backend}>
                 <div className="game">
 
-                    <PermanentPieces 
+                    <PermanentPieces
                         corePieces={this._OffBoardCorePieces.black}
-                        gameCallbacks={this._callbacks}     
+                        gameCallbacks={this._callbacks}
                     />
 
                     <Board
@@ -150,17 +152,25 @@ class Game extends React.Component {
                         gameCallbacks={this._callbacks}
                     />
 
-                    <PermanentPieces 
+                    <PermanentPieces
                         corePieces={this._OffBoardCorePieces.white}
-                        gameCallbacks={this._callbacks}     
+                        gameCallbacks={this._callbacks}
                     />
-
                 </div>
             </DndProvider>
         )
     }
+
+    render() {
+
+        return (
+            <>
+            {this.renderMainGame()}
+            <GameControl />
+            </>
+
+        )
+    }
 }
-
-
 
 export { Game }

@@ -1,5 +1,5 @@
 import React from 'react';
-import BoardSquare  from './square';
+import { DroppableSquare as BoardSquare } from './square';
 
 
 function addHeader(nCols, elems, rowName) {
@@ -30,8 +30,12 @@ function addRow(layout, row, gameCallbacks, elems) {
             {row+1}
         </div>
     );
-    
+
+
     for (let col = 0; col < layout.nCols; ++col) {
+        // Get the 'conceptual' color which must be black or white.
+        const color = layout.isBlack(row, col) ? 'black' : 'white';
+
         elems.push(
             <BoardSquare
                 index={col}
@@ -39,7 +43,8 @@ function addRow(layout, row, gameCallbacks, elems) {
 
                 corePiece={layout.corePiece(row, col)}
                 gameCallbacks={gameCallbacks}
-                isBlack={layout.isBlack(row, col)}
+
+                color={color}
 
                 row={row}
                 col={col}

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
-
 import { itemTypes } from './constants';
 
 
@@ -49,7 +48,7 @@ class CorePieceFactory {
 
 function Piece({ corePiece, gameCallbacks }) {
 
-  const [{ isDragging }, drag] = useDrag({
+  const [{ isDragging }, drag ] = useDrag({
     item: {
       type: itemTypes.PIECE,
       id: corePiece.id,
@@ -61,21 +60,20 @@ function Piece({ corePiece, gameCallbacks }) {
     end: (item, monitor) => gameCallbacks.dragEnd(corePiece.id, monitor.didDrop()),
   });
 
-  const movePiece = isDragging && gameCallbacks.dragBehaviour(corePiece.id).move;
-
-  return (
-    <>
+  if (isDragging && gameCallbacks.dragBehaviour(corePiece.id).move) {
+    /* Hide the original piece when moving */
+    return null;
+  }
+  else {
+    return (
       <div
         className='piece-div'
         ref={drag}
       >
-        {/* Hide the original piece when moving */}
-        {movePiece ? null: <SVGPiece piece={corePiece.name} />}
+        <SVGPiece piece={corePiece.name} />
       </div>
-    </>
-
-  );
-
+    );
+  }
 }
 
 export { Piece, CorePieceFactory, blackPieceNames, whitePieceNames }

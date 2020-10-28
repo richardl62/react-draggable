@@ -5,18 +5,30 @@ import { Piece } from './pieces';
 
 class SimpleSquare extends React.PureComponent {
     render() {
-        let { black, children } = this.props;
+        const { color, children } = this.props;
 
-        const className = 'square ' + (black ? 'black-square' : 'white-square');
+        let className = 'square';
+        if (color) {
+            if(color === 'black') {
+                className += ' black-square';
+            } else if(color === 'white') {
+                className += ' white-square';
+            } else {
+                throw new Error(`Unrecognised square color: ${color}`)
+            }
+        }
+        
         return (
-            <div className={className}>
-                {children}
-            </div>
+            <div className='square-placeholder'>
+                <div className={className}>
+                    {children}
+                </div>
+           </div>
         );
     }
 }
 
-function DroppabledSquare({ corePiece, gameCallbacks, isBlack, row, col }) {
+function DroppableSquare({ corePiece, gameCallbacks, color, row, col }) {
     const [, drop] = useDrop({
         accept: itemTypes.PIECE,
         drop: item => gameCallbacks.movePiece(item.id, row, col),
@@ -32,7 +44,7 @@ function DroppabledSquare({ corePiece, gameCallbacks, isBlack, row, col }) {
                 height: '100%',
             }}
         >
-            <SimpleSquare black={isBlack}>
+            <SimpleSquare color={color}>
                 {corePiece ? <Piece corePiece={corePiece} gameCallbacks={gameCallbacks} /> : null}
             </SimpleSquare>
 
@@ -41,4 +53,4 @@ function DroppabledSquare({ corePiece, gameCallbacks, isBlack, row, col }) {
     );
 }
 
-export default DroppabledSquare;
+export {SimpleSquare, DroppableSquare};
