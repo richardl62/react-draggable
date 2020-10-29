@@ -35,7 +35,7 @@ const layouts = {
     ]
 }
 
-const defaultLayoutName = 'fiveASide';
+const defaultLayoutName = 'standard';
 const defaultTopLeftBlack = false;
 
 
@@ -91,8 +91,23 @@ class Game extends React.Component {
     }
 
     boardLayout(layoutName) {
-        console.log("Selected layout:", layoutName);
-        //this.setState(makeBoardState(layoutName, this._corePieceFactory));
+
+        if(layoutName !== undefined) {
+            this.setState(makeBoardState(layoutName, this._corePieceFactory));
+        }
+        return this.state.layoutName;
+    }
+
+    clear() {
+        alert("clear");
+    }
+
+    flip() {
+        alert("flip");
+    }
+
+    restart() {
+       this.boardLayout(this.state.layoutName);
     }
 
     movePiece(pieceId, row, col)  {
