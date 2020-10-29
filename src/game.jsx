@@ -78,16 +78,10 @@ class Game extends React.Component {
 
         this.state = makeBoardState(defaultLayoutName, cpf);
 
-        const bcp = blackPieceNames.map(name => cpf.make(name));
-        const wcp = whitePieceNames.map(name => cpf.make(name));
-
-           
-        this._OffBoardCorePieces = {
-            black: bcp,
-            white: wcp,
-            all: bcp.concat(wcp),
+        this.state.OffBoardCorePieces = {
+            black: blackPieceNames.map(name => cpf.make(name)),
+            white: whitePieceNames.map(name => cpf.make(name)),
         };
-        Object.freeze(this._OffBoardCorePieces);
     }
 
     boardLayout(layoutName) {
@@ -99,11 +93,19 @@ class Game extends React.Component {
     }
 
     clear() {
-        alert("clear");
+        this.setState({
+            boardLayout: this.state.boardLayout.copy().clearSquares()
+        });
     }
 
     flip() {
-        alert("flip");
+        this.setState({
+            boardLayout: this.state.boardLayout.copy().reserveRows(),
+            OffBoardCorePieces: {
+                black: this.state.OffBoardCorePieces.white,
+                white: this.state.OffBoardCorePieces.black,
+            }
+        });
     }
 
     restart() {
@@ -120,7 +122,10 @@ class Game extends React.Component {
                 newBoardLayout.corePiece(bp.row, bp.col, null);
             }
         } else {
-            const nbp = this._OffBoardCorePieces.all.find(p => p.id === pieceId);
+            let nbp = this.state.OffBoardCorePieces.white.find(p => p.id === pieceId);
+            if(!nbp)
+                nbp = this.state.OffBoardCorePieces.black.find(p => p.id === pieceId);
+
             if (!nbp) {
                 throw new Error(`Piece with id ${pieceId} not found`);
             }
@@ -149,10 +154,6 @@ class Game extends React.Component {
         }
     }
 
-    dragStart(pieceId) {
-        // console.log("Starting drag:", pieceId);
-    }
-
     dragBehaviour(pieceId) {
         const onBoard = Boolean(this.state.boardLayout.findCorePiecebyId(pieceId));
     
@@ -168,7 +169,7 @@ class Game extends React.Component {
                 <div className="game">
 
                     <PermanentPieces
-                        corePieces={this._OffBoardCorePieces.black}
+                        corePieces={this.state.OffBoardCorePieces.black}
                         gameOptions={this}
                     />
 
@@ -178,7 +179,7 @@ class Game extends React.Component {
                     />
 
                     <PermanentPieces
-                        corePieces={this._OffBoardCorePieces.white}
+                        corePieces={this.state.OffBoardCorePieces.white}
                         gameOptions={this}
                     />
                 </div>

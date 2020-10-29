@@ -56,7 +56,6 @@ function Piece({ corePiece, gameOptions }) {
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
     }),
-    begin: () => gameOptions.dragStart(corePiece.id),
     end: (item, monitor) => gameOptions.dragEnd(corePiece.id, monitor.didDrop()),
   });
 

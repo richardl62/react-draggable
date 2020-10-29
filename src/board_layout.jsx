@@ -55,6 +55,30 @@ class BoardLayout {
     
         return null;
     }
+
+    clearSquares() {
+        for(let row of this._corePieces) {
+            row.fill(null);
+        }
+
+        return this;
+    }
+
+    reserveRows() {
+        this._topLeftBlack = this.isBlack(this.nRows-1, 0);
+
+        let cp = this._corePieces; 
+        for(let row = 0; row < this.nRows/2; ++row) {
+            const otherRow = this.nRows - (row+1);
+            for(let col = 0; col < this.nCols; ++col) {
+                const tmp = cp[row][col];
+                cp[row][col] = cp[otherRow][col];
+                cp[otherRow][col] = tmp;
+            }
+        }
+
+        return this;
+    }
 }
 
 export {BoardLayout};
